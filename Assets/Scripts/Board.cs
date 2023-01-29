@@ -11,10 +11,14 @@ public class Board : MonoBehaviour
 
     public Gem[] gems;
 
+    public Gem[,] allGems;
+
     // Start is called before the first frame update
 
     void Start()
     {
+        allGems = new Gem[width, height];
+
         Setup();
     }
 
@@ -40,5 +44,8 @@ public class Board : MonoBehaviour
         Gem gem = Instantiate(gemToSpawn, new Vector3(pos.x, pos.y, 0f), Quaternion.identity);
         gem.transform.parent = transform;
         gem.name = $"Gem - {pos.x}, {pos.y}";
+        allGems[pos.x, pos.y] = gem;
+
+        gem.SetupGem(pos, this);
     }
 }
