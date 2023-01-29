@@ -72,11 +72,20 @@ public class Gem : MonoBehaviour
             otherGem.posIndex.y--;
             posIndex.y++;
         }
-        else if (swipeAngle < -45 && swipeAngle >= -135 && posIndex.y < board.height - 1)
+        else if (swipeAngle < -45 && swipeAngle >= -135 && posIndex.y > 0)
         {
-            otherGem = board.allGems[posIndex.x, posIndex.y + 1];
-            otherGem.posIndex.y--;
-            posIndex.y++;
+            otherGem = board.allGems[posIndex.x, posIndex.y - 1];
+            otherGem.posIndex.y++;
+            posIndex.y--;
         }
+        else if (swipeAngle > 135 || swipeAngle < -135 && posIndex.x > 0)
+        {
+            otherGem = board.allGems[posIndex.x + 1, posIndex.y];
+            otherGem.posIndex.x++;
+            posIndex.x--;
+        }
+
+        board.allGems[posIndex.x, posIndex.y] = this;
+        board.allGems[otherGem.posIndex.x, otherGem.posIndex.y] = otherGem;
     }
 }
