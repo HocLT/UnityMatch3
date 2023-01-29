@@ -15,6 +15,8 @@ public class Gem : MonoBehaviour
     private bool mousePressed;
     private float swipeAngle = 0f;
 
+    private Gem otherGem;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -49,5 +51,32 @@ public class Gem : MonoBehaviour
     {
         swipeAngle = Mathf.Atan2(finalTouchPosition.y - firstTouchPosition.y, finalTouchPosition.x - firstTouchPosition.x);
         swipeAngle = swipeAngle * 180 / Mathf.PI;
+
+        if (Vector3.Distance(firstTouchPosition, finalTouchPosition) > .5f)
+        {
+            MovePieces();
+        }
+    }
+
+    void MovePieces()
+    {
+        if (swipeAngle < 45 && swipeAngle > -45 && posIndex.x < board.width - 1)
+        {
+            otherGem = board.allGems[posIndex.x + 1, posIndex.y];
+            otherGem.posIndex.x--;
+            posIndex.x++;
+        }
+        else if (swipeAngle > 45 && swipeAngle <= 135 && posIndex.y < board.height - 1)
+        {
+            otherGem = board.allGems[posIndex.x, posIndex.y+1];
+            otherGem.posIndex.y--;
+            posIndex.y++;
+        }
+        else if (swipeAngle < -45 && swipeAngle >= -135 && posIndex.y < board.height - 1)
+        {
+            otherGem = board.allGems[posIndex.x, posIndex.y + 1];
+            otherGem.posIndex.y--;
+            posIndex.y++;
+        }
     }
 }
