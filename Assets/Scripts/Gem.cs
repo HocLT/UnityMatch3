@@ -9,6 +9,12 @@ public class Gem : MonoBehaviour
     //[HideInInspector]
     public Board board;
 
+    private Vector2 firstTouchPosition;
+    private Vector2 finalTouchPosition;
+
+    private bool mousePressed;
+    private float swipeAngle = 0f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,12 +24,30 @@ public class Gem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (mousePressed && Input.GetMouseButtonUp(0))
+        {
+            mousePressed = false;
+
+            finalTouchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            CalculateAngle();
+        }
     }
 
     public void SetupGem(Vector2Int pos, Board theBoard)
     {
         posIndex = pos;
         board = theBoard;
+    }
+
+    private void OnMouseDown()
+    {
+        finalTouchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePressed = true;
+    }
+
+    void CalculateAngle()
+    {
+        swipeAngle = Mathf.Atan2(finalTouchPosition.y - firstTouchPosition.y, finalTouchPosition.x - firstTouchPosition.x);
+        swipeAngle = swipeAngle * 180 / Mathf.PI;
     }
 }
